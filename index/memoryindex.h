@@ -25,6 +25,7 @@ public:
     MemoryPostingListIterator(const QList<Posting> postingList);
     bool hasNext();
     Posting next();
+    void jumpTo(int docId);
 private:
     int currentPos;
     const QList<Posting> postingList;

@@ -2,7 +2,10 @@
 #define INDEX_H
 
 #include <QString>
+#include <QStringList>
+#include <QMap>
 #include <QList>
+#include <QDebug>
 
 struct Posting {
     int docId;
@@ -20,6 +23,7 @@ public:
     PostingListIterator() {}
     virtual bool hasNext() = 0;
     virtual Posting next() = 0;
+    virtual void jumpTo(int docId) = 0;
     QList<Posting> toList() {
         QList<Posting> postingList;
         while(hasNext()) {
@@ -35,7 +39,7 @@ public:
     Index() : docIdCounter(0) {}
     virtual PostingListIterator* getPostingList(const QString &term) const = 0;
     virtual float getIdf(const QString &term) const {
-        return getDocFreq(term) / docIdCounter;
+        return (float)getDocFreq(term) / (float)docIdCounter;
     }
     virtual float getNorm(int docId) const = 0;
     virtual int addDocument(QList<QString> terms) {
@@ -49,9 +53,26 @@ public:
     virtual int getDocFreq(const QString &term) const = 0;
 
 
-    virtual QString doc(int docId) { return doc[docId]; }
-    virtual void storeDoc(docId, docContent) {
-        docs.insert(docId, docContent)
+    virtual QString doc(int docId) const { return docs[docId]; }
+    virtual void storeDoc(int docId, const QString &docContent) {
+        docs.insert(docId, docContent);
+    }
+
+    QList<float> getIdfs(const QStringList &terms) const
+    {
+        QList<float> idfs;
+        foreach(QString term, terms) {
+            idfs.append(getIdf(term));
+        }
+        return idfs;
+    }
+
+    QList<PostingListIterator*> getPostingIterators(const QStringList &terms) const {
+        QList<PostingListIterator*> lists;
+        foreach(QString term, terms) {
+            lists.append(getPostingList(term));
+        }
+        return lists;
     }
 
 protected:

@@ -14,7 +14,7 @@ int MemoryIndex::getDocFreq(const QString &term) const
     if (!invertedIndex.contains(term))
         return 0;
     else
-        invertedIndex.value(term)->size();
+        return invertedIndex.value(term)->size();
 }
 
 void MemoryIndex::addPosting(const QString &term, int docId)
@@ -62,4 +62,12 @@ bool MemoryPostingListIterator::hasNext()
 Posting MemoryPostingListIterator::next()
 {
     return postingList.at(currentPos++);
+}
+
+void MemoryPostingListIterator::jumpTo(int docId)
+{
+    int current = postingList[currentPos].docId;
+    while (hasNext() && current < docId) {
+        current = next().docId;
+    }
 }

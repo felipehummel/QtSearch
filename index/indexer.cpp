@@ -5,13 +5,14 @@
 Indexer::Indexer(Index *_index, Tokenizer _tokenizer)
     : index(_index), tokenizer(_tokenizer){}
 
-void Indexer::indexDocument(QString docContent) {
+int Indexer::indexDocument(QString docContent) {
     QStringList docTerms = tokenizer.tokenize(docContent);
     int docId = index->addDocument(docTerms);
     index->calculateNorm(docId);
     index->storeDoc(docId, docContent);
+    return docId;
 }
 
-QStringList Tokenizer::tokenize(QString docContent) {
+QStringList Tokenizer::tokenize(const QString &docContent) const {
     return docContent.split(QRegExp("[^\\w0-9]+"), QString::SkipEmptyParts);
 }
