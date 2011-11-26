@@ -3,12 +3,6 @@
 
 MemoryIndex::MemoryIndex() {}
 
-float MemoryIndex::getNorm(int docId) const
-{
-    Q_UNUSED(docId)
-    return 1.0;// TODO
-}
-
 int MemoryIndex::getDocFreq(const QString &term) const
 {
     if (!invertedIndex.contains(term))
@@ -42,12 +36,6 @@ PostingListIterator* MemoryIndex::getPostingList(const QString &term) const
         const QList<Posting> emptyPosting;
         return new MemoryPostingListIterator(emptyPosting);
     }
-}
-
-void MemoryIndex::calculateNorm(int docId)
-{
-    Q_UNUSED(docId)
-    // TODO
 }
 
 MemoryPostingListIterator::MemoryPostingListIterator(const QList<Posting> _postingList)

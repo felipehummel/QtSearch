@@ -8,10 +8,8 @@ class MemoryIndex : public Index
 {
 public:
     MemoryIndex();
-    float getNorm(int docId) const;
     void addPosting(const QString &term, int docId);
     PostingListIterator* getPostingList(const QString &term) const;
-    void calculateNorm(int docId);
     int getDocFreq(const QString &term) const;
 
 private:

@@ -8,7 +8,6 @@ Indexer::Indexer(Index *_index, Tokenizer _tokenizer)
 int Indexer::indexDocument(QString docContent) {
     QStringList docTerms = tokenizer.tokenize(docContent);
     int docId = index->addDocument(docTerms);
-    index->calculateNorm(docId);
     index->storeDoc(docId, docContent);
     return docId;
 }

@@ -1,6 +1,7 @@
-#include "queryprocessor.h"
 #include <QStringList>
 #include <QDebug>
+
+#include "queryprocessor.h"
 
 QueryProcessor::QueryProcessor(Index *_index, Tokenizer _tokenizer)
     : index(_index), tokenizer(_tokenizer)
@@ -62,5 +63,5 @@ float QueryProcessor::calculateScore(const QList<float> &idfs, const QList<Posti
     for (int i = 0; i < idfs.size(); ++i) {
         accum += idfs.at(i) * postings.at(i).tf;
     }
-    return accum;
+    return accum/index->getNorm(postings.at(0).docId);
 }

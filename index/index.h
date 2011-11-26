@@ -6,6 +6,8 @@
 #include <QMap>
 #include <QList>
 #include <QDebug>
+#include <math.h>
+
 
 struct Posting {
     int docId;
@@ -39,17 +41,21 @@ public:
     Index() : docIdCounter(0) {}
     virtual PostingListIterator* getPostingList(const QString &term) const = 0;
     virtual float getIdf(const QString &term) const {
-        return (float)getDocFreq(term) / (float)docIdCounter;
+        return log((float)docIdCounter / (float)getDocFreq(term));
     }
-    virtual float getNorm(int docId) const = 0;
+    virtual float getNorm(int docId) {
+        return norms.value(docId);
+    }
+
     virtual int addDocument(QList<QString> terms) {
         int docId = nextDocId();
         foreach (const QString term, terms) {
             addPosting(term, docId);
         }
+        // Simple doc length norm. Extracted from Lucene's DefaultSimilarity
+        norms.insert(docId, 1.0 / sqrt((float)terms.size()));
         return docId;
     }
-    virtual void calculateNorm(int docId) = 0;
     virtual int getDocFreq(const QString &term) const = 0;
 
 
@@ -57,6 +63,8 @@ public:
     virtual void storeDoc(int docId, const QString &docContent) {
         docs.insert(docId, docContent);
     }
+
+    // Utility methods
 
     QList<float> getIdfs(const QStringList &terms) const
     {
@@ -81,6 +89,7 @@ private:
     int nextDocId() { return docIdCounter++; }
     int docIdCounter;
     QMap<int, QString> docs;
+    QMap<int, float> norms;
 };
 
 
