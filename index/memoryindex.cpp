@@ -3,16 +3,20 @@
 
 MemoryIndex::MemoryIndex() {}
 
-float MemoryIndex::getIdf(const QString &term) const
-{
-    Q_UNUSED(term)
-    return 1.0;// TODO
-}
 float MemoryIndex::getNorm(int docId) const
 {
     Q_UNUSED(docId)
     return 1.0;// TODO
 }
+
+int MemoryIndex::getDocFreq(const QString &term) const
+{
+    if (!invertedIndex.contains(term))
+        return 0;
+    else
+        invertedIndex.value(term)->size();
+}
+
 void MemoryIndex::addPosting(const QString &term, int docId)
 {
     QList<Posting> *postingList;

@@ -16,11 +16,19 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    index/memoryindex.cpp
+    index/memoryindex.cpp \
+    index/indexer.cpp \
+    query/queryprocessor.cpp
 
 HEADERS += \
     index/index.h \
-    index/memoryindex.h
+    index/memoryindex.h \
+    index/indexer.h \
+    query/queryprocessor.h
+
+
+
+
 
 
 

@@ -2,6 +2,7 @@
 #define INDEX_H
 
 #include <QString>
+#include <QList>
 
 struct Posting {
     int docId;
@@ -19,6 +20,13 @@ public:
     PostingListIterator() {}
     virtual bool hasNext() = 0;
     virtual Posting next() = 0;
+    QList<Posting> toList() {
+        QList<Posting> postingList;
+        while(hasNext()) {
+            postingList.prepend(next());
+        }
+        return postingList;
+    }
 };
 
 class Index
@@ -26,21 +34,32 @@ class Index
 public:
     Index() : docIdCounter(0) {}
     virtual PostingListIterator* getPostingList(const QString &term) const = 0;
-    virtual float getIdf(const QString &term) const = 0;
+    virtual float getIdf(const QString &term) const {
+        return getDocFreq(term) / docIdCounter;
+    }
     virtual float getNorm(int docId) const = 0;
-    virtual void addDocument(QList<QString> terms) {
+    virtual int addDocument(QList<QString> terms) {
         int docId = nextDocId();
         foreach (const QString term, terms) {
             addPosting(term, docId);
         }
+        return docId;
     }
-    virtual void addPosting(const QString &term, int docId) = 0;
     virtual void calculateNorm(int docId) = 0;
-    int nextDocId() { return docIdCounter++; }
+    virtual int getDocFreq(const QString &term) const = 0;
 
+
+    virtual QString doc(int docId) { return doc[docId]; }
+    virtual void storeDoc(docId, docContent) {
+        docs.insert(docId, docContent)
+    }
+
+protected:
+    virtual void addPosting(const QString &term, int docId) = 0;
 private:
+    int nextDocId() { return docIdCounter++; }
     int docIdCounter;
-
+    QMap<int, QString> docs;
 };
 
 

@@ -8,11 +8,11 @@ class MemoryIndex : public Index
 {
 public:
     MemoryIndex();
-    float getIdf(const QString &term) const;
     float getNorm(int docId) const;
     void addPosting(const QString &term, int docId);
     PostingListIterator* getPostingList(const QString &term) const;
     void calculateNorm(int docId);
+    int getDocFreq(const QString &term) const;
 
 private:
     QMap<QString, QList<Posting>* > invertedIndex;
