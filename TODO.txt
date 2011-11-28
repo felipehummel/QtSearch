@@ -1,0 +1,13 @@
+   Desenvolver biblioteca para indexação e busca de documentos texto utilizando-se da biblioteca de código aberto Qt. O principal objetivo é criar uma biblioteca de código aberto similar ao projeto Lucene, entretanto sendo toda desenvolvida utilizando o framework Qt. Visando, desta forma, poder ser utilizada em múltiplas plataformas. Entre as características planejadas para esta biblioteca estão:
+    x Indexação e busca de documentos texto em memória.
+    x Possibilidade de estender a biblioteca com parsers para tipos de documentos específicos (.xls, .doc, .odf e etc.).
+    x Possibilidade de estender a biblioteca para personalizar a forma como o texto dos documentos é quebrado em palavras.
+    x Indexação fácil para bases de dados com um documento por linha de um arquivo texto.
+    x Flexiblidade para personalizar partes da implementação como: separação em tokens, formato do índice invertido, algoritmo de busca, métricas de similaridade.
+    - Indexação fácil de arquivos em diretórios (um documento para cada arquivo texto).
+    - Arquitetura de filtros para "limpar" o documento a ser indexado. (StopWordFilter, AccentFilter...)
+    - Posssibilide de usar a biblioteca para abordagens simples de recomendação de documentos.
+    - Permitir consultas com operadores AND (FEITO) e OR.
+    - Poder ser utilizada, sem modificações, no desenvolvimento para dispostivos móveis.
+    - Velocidade de indexação e busca comparável à ferramenta CLucene.
+    - Ser utilizada como biblioteca compartilhada (shared library)
