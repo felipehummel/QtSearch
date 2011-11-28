@@ -1,3 +1,4 @@
 *.o
 Makefile
 QtSearch
+QtSearch.pro.user
