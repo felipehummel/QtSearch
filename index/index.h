@@ -20,14 +20,17 @@ struct Posting {
     }
 };
 
+
 class PostingListIterator
 {
 public:
     PostingListIterator() {}
     virtual bool hasNext() = 0;
     virtual Posting next() = 0;
-    virtual void jumpTo(int docId) = 0;
+    virtual Posting current() = 0;
+    virtual bool jumpTo(int docId) = 0;
     QList<Posting> toList() {
+        // TODO - do not exaust the iterator (or reset it)
         QList<Posting> postingList;
         while(hasNext()) {
             postingList.prepend(next());

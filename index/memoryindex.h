@@ -11,6 +11,7 @@ public:
     void addPosting(const QString &term, int docId);
     PostingListIterator* getPostingList(const QString &term) const;
     int getDocFreq(const QString &term) const;
+    Posting current();
 
 private:
     QMap<QString, QList<Posting>* > invertedIndex;
@@ -20,10 +21,12 @@ private:
 class MemoryPostingListIterator : public PostingListIterator
 {
 public:
+    // QList has copy-on-write semantics, so its alright to copy
     MemoryPostingListIterator(const QList<Posting> postingList);
     bool hasNext();
     Posting next();
-    void jumpTo(int docId);
+    bool jumpTo(int docId);
+    Posting current();
 private:
     int currentPos;
     const QList<Posting> postingList;

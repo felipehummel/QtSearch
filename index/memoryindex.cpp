@@ -25,7 +25,7 @@ void MemoryIndex::addPosting(const QString &term, int docId)
     if (!postingList->empty() && postingList->at(0).docId == docId)
         (*postingList)[0].tf++;
     else
-        postingList->prepend(Posting(docId, 1));
+        postingList->append(Posting(docId, 1));
 }
 
 PostingListIterator* MemoryIndex::getPostingList(const QString &term) const
@@ -52,10 +52,21 @@ Posting MemoryPostingListIterator::next()
     return postingList.at(currentPos++);
 }
 
-void MemoryPostingListIterator::jumpTo(int docId)
+Posting MemoryPostingListIterator::current() {
+    return postingList.at(currentPos);
+}
+
+bool MemoryPostingListIterator::jumpTo(int docId)
 {
-    int current = postingList[currentPos].docId;
-    while (hasNext() && current < docId) {
-        current = next().docId;
+    // TODO - don't use next(). Instead walk the postingList directly
+    if (currentPos < postingList.size()) { // check if already exausted or empty
+        int current = postingList[currentPos].docId;
+        while (hasNext() && current < docId) {
+            current = next().docId;
+        }
+        if (currentPos > 0)
+            currentPos--;
+        return current == docId;
     }
+    return false;
 }
