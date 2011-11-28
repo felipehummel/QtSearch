@@ -10,9 +10,10 @@
 
 
 struct Posting {
-    const int docId;
+    int docId;
     int tf; // Term Frequency
     Posting(int _docId, int _tf) : docId(_docId), tf(_tf) {}
+    Posting() : docId(-1), tf(-1) {}
     QString toString() {
         return QString("Posting(docId=%1, tf=%2)")
                 .arg(docId).arg(tf);
