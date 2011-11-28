@@ -33,12 +33,13 @@ QString Tokenizer::cleanAccents(const QString &text) {
     return str;
 }
 
-bool Indexer::indexFileDocPerLine(const QString &filePath)
+bool Indexer::indexFileDocPerLine(const QString &filePath, const char *codec)
 {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return false;
     QTextStream in(&file);
+    in.setCodec(codec);
     QString line = in.readLine();
     while (!line.isNull()) {
         indexDocument(line);

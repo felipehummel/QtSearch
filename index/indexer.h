@@ -19,7 +19,7 @@ public:
     Indexer(Index *_index, Tokenizer tokenizer = Tokenizer());
     virtual int indexDocument(QString docContent);
     const Index* getIndex() { return index; }
-    bool indexFileDocPerLine(const QString &filePath);
+    bool indexFileDocPerLine(const QString &filePath, const char *codec);
 
 private:
     Index *index;

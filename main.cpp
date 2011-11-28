@@ -13,12 +13,13 @@ int main(int argc, char *argv[])
     indexer.indexDocument("example document");
     indexer.indexDocument("example document two");
     if (argc > 1) {
-        indexer.indexFileDocPerLine(QString(argv[1]));
+        indexer.indexFileDocPerLine(QString(argv[1]), "UTF-8");
     }
 
     QueryProcessor processor(index, Tokenizer());
 
     QTextStream stream(stdin);
+    stream.setCodec("UTF-8");
     QString line;
     do {
         qDebug() << "Input you query: ---------------\n";
