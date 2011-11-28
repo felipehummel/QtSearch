@@ -10,7 +10,7 @@
 
 
 struct Posting {
-    int docId;
+    const int docId;
     int tf; // Term Frequency
     Posting(int _docId, int _tf) : docId(_docId), tf(_tf) {}
     QString toString() {
@@ -43,7 +43,7 @@ public:
     virtual float getIdf(const QString &term) const {
         return log((float)docIdCounter / (float)getDocFreq(term));
     }
-    virtual float getNorm(int docId) {
+    virtual float getNorm(int docId) const {
         return norms.value(docId);
     }
 
