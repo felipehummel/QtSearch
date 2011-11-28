@@ -20,7 +20,7 @@ QList<Result> QueryProcessor::searchAND(const QString &query) const {
         if (!it->hasNext())
             return QList<Result>();
     }
-    QList<float> idfs = index->getIdfs(terms);
+    float *idfs = index->getIdfs(terms);
     QList<Result> results;
     forever {
         if (!postingLists[0]->hasNext())
@@ -49,6 +49,7 @@ QList<Result> QueryProcessor::searchAND(const QString &query) const {
         }
     }
 
+    delete idfs;
     foreach(PostingListIterator *it, postingLists) {
         delete it;
     }
@@ -57,11 +58,11 @@ QList<Result> QueryProcessor::searchAND(const QString &query) const {
 }
 
 
-float QueryProcessor::calculateScore(const QList<float> &idfs, const QList<Posting> postings) const
+float QueryProcessor::calculateScore(float *idfs, const QList<Posting> postings) const
 {
     float accum = 0.0;
-    for (int i = 0; i < idfs.size(); ++i) {
-        accum += idfs.at(i) * postings.at(i).tf;
+    for (int i = 0; i < postings.size(); ++i) {
+        accum += idfs[i] * postings.at(i).tf;
     }
     return accum * index->getNorm(postings.at(0).docId);
 }

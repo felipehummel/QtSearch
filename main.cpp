@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <QStringList>
+#include <QTextStream>
 
 #include "index/memoryindex.h"
 #include "index/indexer.h"
@@ -16,10 +17,17 @@ int main(int argc, char *argv[])
     }
 
     QueryProcessor processor(index, Tokenizer());
-    QList<Result> results = processor.searchAND("example");
-    foreach (Result result, results) {
-        qDebug () << result.score << " :: " << index->doc(result.docId);
-    }
 
+    QTextStream stream(stdin);
+    QString line;
+    do {
+        qDebug() << "Input you query: ---------------\n";
+        line = stream.readLine();
+        QList<Result> results = processor.searchAND(line);
+        foreach (Result result, results) {
+            qDebug () << result.score << " :: " << index->doc(result.docId);
+        }
+
+    } while (!line.isNull());
     return 1;
 }
