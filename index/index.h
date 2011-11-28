@@ -66,11 +66,11 @@ public:
 
     // Utility methods
 
-    QList<float> getIdfs(const QStringList &terms) const
+    float* getIdfs(const QStringList &terms) const
     {
-        QList<float> idfs;
-        foreach(QString term, terms) {
-            idfs.append(getIdf(term));
+        float *idfs = new float[terms.size()];
+        for (int i = 0; i < terms.size(); ++i) {
+            idfs[i] = getIdf(terms.at(i));
         }
         return idfs;
     }
