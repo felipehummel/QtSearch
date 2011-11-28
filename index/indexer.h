@@ -2,6 +2,8 @@
 #define INDEXER_H
 
 #include <QStringList>
+#include <QFile>
+#include <QTextStream>
 
 #include "index/index.h"
 
@@ -16,6 +18,8 @@ public:
     Indexer(Index *_index, Tokenizer tokenizer = Tokenizer());
     virtual int indexDocument(QString docContent);
     const Index* getIndex() { return index; }
+    bool indexFileDocPerLine(const QString &filePath);
+
 private:
     Index *index;
     Tokenizer tokenizer;

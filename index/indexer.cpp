@@ -15,3 +15,17 @@ int Indexer::indexDocument(QString docContent) {
 QStringList Tokenizer::tokenize(const QString &docContent) const {
     return docContent.split(QRegExp("[^\\w0-9]+"), QString::SkipEmptyParts);
 }
+
+bool Indexer::indexFileDocPerLine(const QString &filePath)
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return false;
+    QTextStream in(&file);
+    QString line = in.readLine();
+    while (!line.isNull()) {
+        indexDocument(line);
+        line = in.readLine();
+    }
+    return true;
+}
