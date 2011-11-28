@@ -10,6 +10,7 @@
 class Tokenizer {
 public:
     virtual QStringList tokenize(const QString &docContent) const;
+    static QString cleanAccents(const QString &text);
 };
 
 class Indexer
