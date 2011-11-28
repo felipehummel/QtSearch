@@ -16,6 +16,7 @@ QList<Result> QueryProcessor::searchAND(const QString &query) const {
     if (terms.empty())
         return QList<Result>();
     QList<PostingListIterator*> postingLists = index->getPostingIterators(terms);
+
     foreach (PostingListIterator *it, postingLists) {
         if (!it->hasNext())
             return QList<Result>();
@@ -27,19 +28,13 @@ QList<Result> QueryProcessor::searchAND(const QString &query) const {
     forever {
         if (!postingLists[0]->hasNext())
             break;
-        Posting pivotPosting = postingLists[0]->next();
-        int pivotDocId = pivotPosting.docId;
+        matchedPostings[0] = postingLists[0]->next();
+        int pivotDocId = matchedPostings[0].docId;
         bool match = true;
-        matchedPostings[0] = pivotPosting;
         for (int i = 1; i < postingLists.size() && match; ++i) {
-            postingLists[i]->jumpTo(pivotDocId);
-            if (postingLists[i]->hasNext()) {
-                Posting posting = postingLists[i]->next();
-                if (posting.docId == pivotDocId)
-                    matchedPostings[i] = posting;
-                else
-                    match = false;
-            }
+            bool found = postingLists[i]->jumpTo(pivotDocId);
+            if (found && postingLists[i]->current().docId == pivotDocId)
+                matchedPostings[i] = postingLists[i]->current();
             else
                 match = false;
         }
