@@ -41,7 +41,7 @@ public:
     Index() : docIdCounter(0) {}
     virtual PostingListIterator* getPostingList(const QString &term) const = 0;
     virtual float getIdf(const QString &term) const {
-        return log((float)docIdCounter / (float)getDocFreq(term));
+        return log((float)(docIdCounter + 1) / (float)getDocFreq(term)); // + 1 to avoid idf = 0
     }
     virtual float getNorm(int docId) const {
         return norms.value(docId);
@@ -91,7 +91,5 @@ private:
     QMap<int, QString> docs;
     QMap<int, float> norms;
 };
-
-
 
 #endif // INDEX_H
