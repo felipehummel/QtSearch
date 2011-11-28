@@ -20,23 +20,23 @@ QList<Result> QueryProcessor::searchAND(const QString &query) const {
         if (!it->hasNext())
             return QList<Result>();
     }
-    float *idfs = index->getIdfs(terms);
     QList<Result> results;
+    float *idfs = index->getIdfs(terms);
+    Posting *matchedPostings = new Posting[postingLists.size()];
+    // TODO - sort postingListsIterator by size. Use smaller as pivot
     forever {
         if (!postingLists[0]->hasNext())
             break;
         Posting pivotPosting = postingLists[0]->next();
         int pivotDocId = pivotPosting.docId;
         bool match = true;
-        QList<Posting> matchedPostings;
-        matchedPostings.reserve(postingLists.size());
-        matchedPostings.append(pivotPosting);
+        matchedPostings[0] = pivotPosting;
         for (int i = 1; i < postingLists.size() && match; ++i) {
             postingLists[i]->jumpTo(pivotDocId);
             if (postingLists[i]->hasNext()) {
                 Posting posting = postingLists[i]->next();
                 if (posting.docId == pivotDocId)
-                    matchedPostings.append(posting);
+                    matchedPostings[i] = posting;
                 else
                     match = false;
             }
@@ -44,11 +44,12 @@ QList<Result> QueryProcessor::searchAND(const QString &query) const {
                 match = false;
         }
         if (match) {
-            float score = calculateScore(idfs, matchedPostings);
+            float score = calculateScore(idfs, matchedPostings, postingLists.size());
             results.append(Result(pivotDocId, score));
         }
     }
 
+    delete matchedPostings;
     delete idfs;
     foreach(PostingListIterator *it, postingLists) {
         delete it;
@@ -58,11 +59,11 @@ QList<Result> QueryProcessor::searchAND(const QString &query) const {
 }
 
 
-float QueryProcessor::calculateScore(float *idfs, const QList<Posting> postings) const
+float QueryProcessor::calculateScore(float *idfs, const Posting *postings, int numTerms) const
 {
     float accum = 0.0;
-    for (int i = 0; i < postings.size(); ++i) {
-        accum += idfs[i] * postings.at(i).tf;
+    for (int i = 0; i < numTerms; ++i) {
+        accum += idfs[i] * postings[i].tf;
     }
-    return accum * index->getNorm(postings.at(0).docId);
+    return accum * index->getNorm(postings[0].docId);
 }

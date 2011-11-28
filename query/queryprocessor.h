@@ -19,7 +19,7 @@ public:
 
     const Index* getIndex() { return index; }
 private:
-    float calculateScore(float *idfs, const QList<Posting> postings) const;
+    float calculateScore(float *idfs, const Posting *postings, int numTerms) const;
 
     const Index *index;
     const Tokenizer tokenizer;
