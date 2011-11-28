@@ -21,8 +21,8 @@ void MemoryIndex::addPosting(const QString &term, int docId)
         invertedIndex.insert(term, postingList);
     }
 
-    //if last insertion was on the same doc, increment frequency
-    if (!postingList->empty() && postingList->at(0).docId == docId)
+    //if last insertion (last element) was on the same doc, increment frequency
+    if (!postingList->empty() && postingList->last().docId == docId)
         (*postingList)[0].tf++;
     else
         postingList->append(Posting(docId, 1));
