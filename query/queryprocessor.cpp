@@ -8,7 +8,7 @@ QueryProcessor::QueryProcessor(Index *_index, Tokenizer _tokenizer)
 {
 }
 bool resultLessThan(Result &a, Result &b) {
-    return a.score < b.score;
+    return a.score > b.score;
 }
 
 QList<Result> QueryProcessor::searchAND(const QString &query) const {
@@ -63,5 +63,5 @@ float QueryProcessor::calculateScore(const QList<float> &idfs, const QList<Posti
     for (int i = 0; i < idfs.size(); ++i) {
         accum += idfs.at(i) * postings.at(i).tf;
     }
-    return accum/index->getNorm(postings.at(0).docId);
+    return accum * index->getNorm(postings.at(0).docId);
 }
