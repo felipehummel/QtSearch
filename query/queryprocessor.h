@@ -3,6 +3,7 @@
 
 #include "index/index.h"
 #include "index/indexer.h"
+#include "analyzer/analyzer.h"
 
 struct Result {
     int docId;
@@ -13,7 +14,7 @@ struct Result {
 class QueryProcessor
 {
 public:
-    QueryProcessor(Index *_index, Tokenizer _tokenizer = Tokenizer());
+    QueryProcessor(Index *_index, const Analyzer &_analyzer = StandardAnalyzer());
 
     QList<Result> searchAND(const QString &query) const;
 
@@ -22,7 +23,7 @@ private:
     float calculateScore(float *idfs, const Posting *postings, int numTerms) const;
 
     const Index *index;
-    const Tokenizer tokenizer;
+    const Analyzer analyzer;
 };
 
 #endif // QUERYPROCESSOR_H

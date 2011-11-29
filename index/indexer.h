@@ -1,28 +1,23 @@
 #ifndef INDEXER_H
 #define INDEXER_H
 
-#include <QStringList>
+
 #include <QFile>
 #include <QTextStream>
 
 #include "index/index.h"
-
-class Tokenizer {
-public:
-    virtual QStringList tokenize(const QString &docContent) const;
-    static QString cleanAccents(const QString &text);
-};
+#include "analyzer/analyzer.h"
 
 class Indexer
 {
 public:
-    Indexer(Index *_index, Tokenizer tokenizer = Tokenizer());
+    Indexer(Index *_index, const Analyzer &_analyzer = StandardAnalyzer());
     virtual int indexDocument(QString docContent);
     const Index* getIndex() { return index; }
     bool indexFileDocPerLine(const QString &filePath, const char *codec);
 
 private:
     Index *index;
-    Tokenizer tokenizer;
+    Analyzer analyzer;
 };
 #endif // INDEXER_H

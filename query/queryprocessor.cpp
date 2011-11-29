@@ -3,8 +3,8 @@
 
 #include "queryprocessor.h"
 
-QueryProcessor::QueryProcessor(Index *_index, Tokenizer _tokenizer)
-    : index(_index), tokenizer(_tokenizer)
+QueryProcessor::QueryProcessor(Index *_index, const Analyzer &_analyzer)
+    : index(_index), analyzer(_analyzer)
 {
 }
 bool resultLessThan(Result &a, Result &b) {
@@ -12,7 +12,7 @@ bool resultLessThan(Result &a, Result &b) {
 }
 
 QList<Result> QueryProcessor::searchAND(const QString &query) const {
-    QStringList terms = tokenizer.tokenize(query);
+    QStringList terms = analyzer.analyze(query);
     if (terms.empty())
         return QList<Result>();
     QList<PostingListIterator*> postingLists = index->getPostingIterators(terms);
