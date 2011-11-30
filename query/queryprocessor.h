@@ -17,6 +17,7 @@ public:
     QueryProcessor(Index *_index, const Analyzer &_analyzer = StandardAnalyzer());
 
     QList<Result> searchAND(const QString &query) const;
+    QList<Result> searchOR(const QString &query) const;
 
     const Index* getIndex() { return index; }
 private:

@@ -53,6 +53,45 @@ QList<Result> QueryProcessor::searchAND(const QString &query) const {
     return results;
 }
 
+QList<Result> QueryProcessor::searchOR(const QString &query) const {
+
+    QHash <int, float> accumHash;
+    float score;
+
+    QStringList terms = analyzer.analyze(query);
+    if (terms.empty())
+        return QList<Result>();
+    QList<PostingListIterator*> postingLists = index->getPostingIterators(terms);
+
+    int termIndex = 0;
+
+    foreach (PostingListIterator *it, postingLists) {
+        if (it->hasNext()) {
+
+            foreach (Posting posting, it->toList()) {
+                accumHash[posting.docId] = accumHash[posting.docId]
+                        + (index->getIdf(terms.at(termIndex)) * posting.tf);
+            }
+        }
+        termIndex++;
+    }
+
+    QList<Result> results;
+
+    QHash<int, float>::const_iterator i = accumHash.constBegin();
+    while (i != accumHash.constEnd()) {
+        score = i.value() * index->getNorm(i.key());
+        results.append(Result(i.key(),score));
+        i++;
+    }
+
+    foreach(PostingListIterator *it, postingLists)
+        delete it;
+
+    qSort(results.begin(), results.end(), resultLessThan);
+    return results;
+}
+
 
 float QueryProcessor::calculateScore(float *idfs, const Posting *postings, int numTerms) const
 {

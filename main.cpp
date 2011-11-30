@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
     Indexer indexer(index, analyzer);
     indexer.indexDocument("example document");
     indexer.indexDocument("example document two");
+    indexer.indexDocument("example document document two lala");
     if (argc > 1) {
         indexer.indexFileDocPerLine(QString(argv[1]), "UTF-8");
     }
@@ -44,6 +45,16 @@ int main(int argc, char *argv[])
         foreach (Result result, results) {
             qDebug () << result.score << " :: " << index->doc(result.docId);
         }
+
+        qDebug() << "======= RESPONSE FOR QUERY USING OR";
+        x = QTime::currentTime().msec();
+        results = processor.searchOR(line);
+        y = QTime::currentTime().msec();
+        qDebug () << "Took " << (y-x) << "ms";
+        foreach (Result result, results) {
+            qDebug () << result.score << " :: " << index->doc(result.docId);
+        }
+
 
     } while (!line.isNull());
     return 1;
