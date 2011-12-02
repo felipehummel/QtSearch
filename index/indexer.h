@@ -15,6 +15,7 @@ public:
     virtual int indexDocument(QString docContent);
     const Index* getIndex() { return index; }
     bool indexFileDocPerLine(const QString &filePath, const char *codec);
+    bool indexDir(const QString &dirPath, const char *codec);
 
 private:
     Index *index;
