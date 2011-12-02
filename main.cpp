@@ -2,6 +2,7 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QTime>
+#include <QDir>
 
 #include "index/memoryindex.h"
 #include "index/indexer.h"
@@ -27,7 +28,11 @@ int main(int argc, char *argv[])
     indexer.indexDocument("example document two");
     indexer.indexDocument("example document document two lala");
     if (argc > 1) {
-        indexer.indexFileDocPerLine(QString(argv[1]), "UTF-8");
+        QDir dir = QDir(QString(argv[1]));
+        if (dir.exists())
+            indexer.indexDir(QString(argv[1]), "UTF-8");
+        else
+            indexer.indexFileDocPerLine(QString(argv[1]), "UTF-8");
     }
 
     QueryProcessor processor(index, analyzer);

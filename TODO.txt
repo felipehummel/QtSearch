@@ -5,7 +5,7 @@
     x Indexação fácil para bases de dados com um documento por linha de um arquivo texto.
     x Flexiblidade para personalizar partes da implementação como: separação em tokens, formato do índice invertido, algoritmo de busca, métricas de similaridade.
     x Arquitetura de filtros para "limpar" o documento a ser indexado. (StopWordFilter, AccentFilter...)
-    - Indexação fácil de arquivos em diretórios (um documento para cada arquivo texto).
+    x Indexação fácil de arquivos em diretórios (um documento para cada arquivo texto).
     - Posssibilide de usar a biblioteca para abordagens simples de recomendação de documentos.
     x Permitir consultas com operadores AND (FEITO) e OR (FEITO).
     - Poder ser utilizada, sem modificações, no desenvolvimento para dispostivos móveis.

@@ -1,4 +1,5 @@
 #include <QRegExp>
+#include <QDir>
 
 #include "index/indexer.h"
 #include "analyzer/tokenstream.h"
@@ -25,5 +26,38 @@ bool Indexer::indexFileDocPerLine(const QString &filePath, const char *codec)
         indexDocument(line);
         line = in.readLine();
     }
+    return true;
+}
+
+bool Indexer::indexDir(const QString &dirPath, const char *codec)
+{
+    QDir dir = QDir(dirPath);
+
+    if (!dir.exists()) {
+        qDebug() << "Directory does not exist.";
+        return false;
+    }
+
+    QList<QFileInfo> entryInfoList;
+    entryInfoList = dir.entryInfoList();
+
+    for (int i = 0; i < entryInfoList.size(); i++) {
+
+        if (entryInfoList.at(i).baseName() == "")
+            continue;
+
+        QFile file(entryInfoList.at(i).absoluteFilePath());
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            indexDir(entryInfoList.at(i).absoluteFilePath(), "UTF-8");
+            continue;
+        }
+
+        QTextStream in(&file);
+        in.setCodec(codec);
+        QString text = in.readAll();
+        indexDocument(text);
+        file.close();
+    }
+
     return true;
 }
