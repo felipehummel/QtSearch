@@ -28,6 +28,7 @@ public:
     Posting next();
     bool jumpTo(int docId);
     Posting current();
+    int size();
 private:
     int currentPos;
     const QList<Posting> postingList;

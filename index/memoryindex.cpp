@@ -70,3 +70,8 @@ bool MemoryPostingListIterator::jumpTo(int docId)
     }
     return false;
 }
+
+int MemoryPostingListIterator::size()
+{
+    return postingList.size();
+}

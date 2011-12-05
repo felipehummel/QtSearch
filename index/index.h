@@ -29,6 +29,7 @@ public:
     virtual bool hasNext() = 0;
     virtual Posting next() = 0;
     virtual Posting current() = 0;
+    virtual int size() = 0;
     virtual bool jumpTo(int docId) = 0;
     QList<Posting> toList() {
         // TODO - do not exaust the iterator (or reset it)
