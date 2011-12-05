@@ -11,3 +11,6 @@
     - Poder ser utilizada, sem modificações, no desenvolvimento para dispostivos móveis.
     - Velocidade de indexação e busca comparável à ferramenta CLucene.
     - Ser utilizada como biblioteca compartilhada (shared library)
+
+
+    - No searchOR usar iteração manual ao invés de usar o toList e foreach{}
