@@ -3,11 +3,12 @@
 
 #include <QMap>
 #include "index.h"
+#include "similarity/similarity.h"
 
 class MemoryIndex : public Index
 {
 public:
-    MemoryIndex();
+    MemoryIndex(Similarity _sim);
     void addPosting(const QString &term, int docId);
     PostingListIterator* getPostingList(const QString &term) const;
     int getDocFreq(const QString &term) const;

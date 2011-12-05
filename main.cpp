@@ -11,7 +11,8 @@
 
 int main(int argc, char *argv[])
 {
-    Index *index = new MemoryIndex();
+    Similarity sim;
+    Index *index = new MemoryIndex(sim);
     Tokenizer tokenizer;
     Analyzer analyzer(tokenizer);
     QSet<QString> stopWords;
@@ -22,7 +23,6 @@ int main(int argc, char *argv[])
     analyzer.withAccentFilter();
     analyzer.withLowerCaseFilter();
     analyzer.withStopWordFilter(stopWords);
-
     Indexer indexer(index, analyzer);
     indexer.indexDocument("example document");
     indexer.indexDocument("example document two");
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
             indexer.indexFileDocPerLine(QString(argv[1]), "UTF-8");
     }
 
-    QueryProcessor processor(index, analyzer);
+    QueryProcessor processor(index, analyzer, sim);
 
     QTextStream stream(stdin);
     stream.setCodec("UTF-8");

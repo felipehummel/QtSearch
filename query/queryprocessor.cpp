@@ -3,8 +3,8 @@
 
 #include "queryprocessor.h"
 
-QueryProcessor::QueryProcessor(Index *_index, const Analyzer &_analyzer)
-    : index(_index), analyzer(_analyzer)
+QueryProcessor::QueryProcessor(Index *_index, const Analyzer &_analyzer, const Similarity _similarity)
+    : index(_index), analyzer(_analyzer), similarity(_similarity)
 {
 }
 bool resultLessThan(Result &a, Result &b) {
@@ -74,7 +74,7 @@ QList<Result> QueryProcessor::searchOR(const QString &query) const {
 
             foreach (Posting posting, it->toList()) {
                 accumHash[posting.docId] = accumHash[posting.docId]
-                        + (index->getIdf(terms.at(termIndex)) * posting.tf);
+                        + (index->getIdf(terms.at(termIndex)) * similarity.tf(posting.tf));
             }
         }
         termIndex++;
@@ -135,7 +135,7 @@ float QueryProcessor::calculateScore(float *idfs, const Posting *postings, int n
 {
     float accum = 0.0;
     for (int i = 0; i < numTerms; ++i) {
-        accum += idfs[i] * postings[i].tf;
+        accum += idfs[i] * similarity.tf(postings[i].tf);
     }
     return accum * index->getNorm(postings[0].docId);
 }

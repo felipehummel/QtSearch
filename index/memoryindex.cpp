@@ -1,7 +1,7 @@
 #include "memoryindex.h"
 #include <QDebug>
 
-MemoryIndex::MemoryIndex() {}
+MemoryIndex::MemoryIndex(Similarity _sim) : Index(_sim) {}
 
 int MemoryIndex::getDocFreq(const QString &term) const
 {

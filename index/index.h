@@ -7,6 +7,7 @@
 #include <QList>
 #include <QDebug>
 #include <math.h>
+#include <similarity/similarity.h>
 
 
 struct Posting {
@@ -42,10 +43,11 @@ public:
 class Index
 {
 public:
-    Index() : docIdCounter(0) {}
+    Index(Similarity _similarity = Similarity()) : similarity(_similarity), docIdCounter(0) {}
+
     virtual PostingListIterator* getPostingList(const QString &term) const = 0;
-    virtual float getIdf(const QString &term) const {
-        return log((float)(docIdCounter + 1) / (float)getDocFreq(term)); // + 1 to avoid idf = 0
+    float getIdf(const QString &term) const {
+        return similarity.idf(getDocFreq(term), docIdCounter, term);
     }
     virtual float getNorm(int docId) const {
         return norms.value(docId);
@@ -57,7 +59,7 @@ public:
             addPosting(term, docId);
         }
         // Simple doc length norm. Extracted from Lucene's DefaultSimilarity
-        norms.insert(docId, 1.0 / sqrt((float)terms.size()));
+        norms.insert(docId, similarity.norm(terms.size()));
         return docId;
     }
     virtual int getDocFreq(const QString &term) const = 0;
@@ -88,6 +90,7 @@ public:
     }
 
 protected:
+    const Similarity similarity;
     virtual void addPosting(const QString &term, int docId) = 0;
 private:
     int nextDocId() { return docIdCounter++; }

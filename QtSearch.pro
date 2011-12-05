@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     query/queryprocessor.cpp \
     analyzer/tokenstream.cpp \
     analyzer/analyzer.cpp \
-    analyzer/tokenizer.cpp
+    analyzer/tokenizer.cpp \
+    similarity/similarity.cpp
 
 HEADERS += \
     index/index.h \
@@ -30,7 +31,10 @@ HEADERS += \
     query/queryprocessor.h \
     analyzer/tokenstream.h \
     analyzer/analyzer.h \
-    analyzer/tokenizer.h
+    analyzer/tokenizer.h \
+    similarity/similarity.h
+
+
 
 
 

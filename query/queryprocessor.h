@@ -14,7 +14,9 @@ struct Result {
 class QueryProcessor
 {
 public:
-    QueryProcessor(Index *_index, const Analyzer &_analyzer = StandardAnalyzer());
+    QueryProcessor(Index *_index,
+                   const Analyzer &_analyzer = StandardAnalyzer(),
+                   const Similarity _similarity = Similarity()) ;
 
     QList<Result> searchAND(const QString &query) const;
     QList<Result> searchOR(const QString &query) const;
@@ -27,6 +29,7 @@ private:
 
     const Index *index;
     const Analyzer analyzer;
+    const Similarity similarity;
 };
 
 #endif // QUERYPROCESSOR_H
