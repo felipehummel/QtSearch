@@ -18,10 +18,12 @@ public:
 
     QList<Result> searchAND(const QString &query) const;
     QList<Result> searchOR(const QString &query) const;
+    QList<Result> recommendedDocuments(const QString &doc) const;
 
     const Index* getIndex() { return index; }
 private:
     float calculateScore(float *idfs, const Posting *postings, int numTerms) const;
+    QList <QPair <QString, float> > selectKeywords(const QString &doc) const;
 
     const Index *index;
     const Analyzer analyzer;

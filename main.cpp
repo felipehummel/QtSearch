@@ -40,6 +40,15 @@ int main(int argc, char *argv[])
     QTextStream stream(stdin);
     stream.setCodec("UTF-8");
     QString line;
+
+    qDebug() << "Input your document: ---------------\n";
+    line = stream.readLine();
+    qDebug() << "Docoments recommended: ---------------\n";
+    QList<Result> recommendedDocs = processor.recommendedDocuments(line);
+    foreach (Result result, recommendedDocs) {
+        qDebug () << result.score << " :: " << index->doc(result.docId);
+    }
+
     do {
         qDebug() << "Input you query: ---------------\n";
         line = stream.readLine();

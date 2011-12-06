@@ -11,6 +11,10 @@ bool resultLessThan(Result &a, Result &b) {
     return a.score > b.score;
 }
 
+bool pairLessThan(QPair<QString, float> &a, QPair<QString, float> &b) {
+    return a.second > b.second;
+}
+
 QList<Result> QueryProcessor::searchAND(const QString &query) const {
     QStringList terms = analyzer.analyze(query);
     if (terms.empty())
@@ -89,6 +93,40 @@ QList<Result> QueryProcessor::searchOR(const QString &query) const {
         delete it;
 
     qSort(results.begin(), results.end(), resultLessThan);
+    return results;
+}
+
+QList <QPair <QString, float> > QueryProcessor::selectKeywords(const QString &doc) const
+{
+    QStringList terms = analyzer.analyze(doc);
+    QList < QPair<QString, float> > rankedListTerms;
+    QPair <QString, float> pair;
+
+    for (int i = 0; i < terms.size(); ++i) {
+        pair.first = terms.at(i);
+        pair.second = index->getIdf(terms.at(i));
+        rankedListTerms << pair;
+    }
+
+    qSort(rankedListTerms.begin(), rankedListTerms.end(), pairLessThan);
+    return rankedListTerms;
+}
+
+QList<Result> QueryProcessor::recommendedDocuments(const QString &doc) const
+{
+    // Select e rank keywords according to idf
+    QList <QPair <QString, float> > keywords = selectKeywords(doc);
+
+    // Query will be the 10 most relevant words (according to idf)
+    QString query;
+    for (int i = 0; i < keywords.size() && i < 10; i++) {
+        if (keywords.at(i).second != INFINITY)
+            query = query + " " + keywords.at(i).first;
+    }
+
+    // Return the recommended documents
+    QList<Result> results;
+    results = searchOR(query);
     return results;
 }
 
