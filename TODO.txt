@@ -6,11 +6,12 @@
     x Flexiblidade para personalizar partes da implementação como: separação em tokens, formato do índice invertido, algoritmo de busca, métricas de similaridade.
     x Arquitetura de filtros para "limpar" o documento a ser indexado. (StopWordFilter, AccentFilter...)
     x Indexação fácil de arquivos em diretórios (um documento para cada arquivo texto).
-    - Posssibilide de usar a biblioteca para abordagens simples de recomendação de documentos.
+    x Posssibilide de usar a biblioteca para abordagens simples de recomendação de documentos.
     x Permitir consultas com operadores AND (FEITO) e OR (FEITO).
-    - Poder ser utilizada, sem modificações, no desenvolvimento para dispostivos móveis.
-    - Velocidade de indexação e busca comparável à ferramenta CLucene.
+    x Poder ser utilizada, sem modificações, no desenvolvimento para dispostivos móveis.
+    x Velocidade de indexação e busca comparável à ferramenta CLucene.
     - Ser utilizada como biblioteca compartilhada (shared library)
 
 
+FIXES:
     - No searchOR usar iteração manual ao invés de usar o toList e foreach{}
