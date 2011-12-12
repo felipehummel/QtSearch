@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 
     qDebug() << "Input your document: ---------------\n";
     line = stream.readLine();
-    qDebug() << "Docoments recommended: ---------------\n";
+    qDebug() << "Documents recommended: ---------------\n";
     QList<Result> recommendedDocs = processor.recommendedDocuments(line);
     foreach (Result result, recommendedDocs) {
         qDebug () << result.score << " :: " << index->doc(result.docId);
