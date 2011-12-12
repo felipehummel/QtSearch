@@ -14,4 +14,4 @@
 
 
 FIXES:
-    - No searchOR usar iteração manual ao invés de usar o toList e foreach{}
+    x No searchOR usar iteração manual ao invés de usar o toList e foreach{}

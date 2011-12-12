@@ -55,8 +55,8 @@ QList<Result> QueryProcessor::searchAND(const QString &query) const {
         }
     }
 
-    delete matchedPostings;
-    delete idfs;
+    delete[] matchedPostings;
+    delete[] idfs;
     foreach(PostingListIterator *it, postingLists) {
         delete it;
     }
@@ -70,19 +70,19 @@ QList<Result> QueryProcessor::searchOR(const QString &query) const {
     float score;
 
     QStringList terms = analyzer.analyze(query);
+    float *idfs = index->getIdfs(terms);
     if (terms.empty())
         return QList<Result>();
     QList<PostingListIterator*> postingLists = index->getPostingIterators(terms);
 
     int termIndex = 0;
 
-    foreach (PostingListIterator *it, postingLists) {
-        if (it->hasNext()) {
 
-            foreach (Posting posting, it->toList()) {
-                accumHash[posting.docId] = accumHash[posting.docId]
-                        + (index->getIdf(terms.at(termIndex)) * similarity.tf(posting.tf));
-            }
+    foreach (PostingListIterator *it, postingLists) {
+        while(it->hasNext()) {
+            Posting posting = it->next();
+            accumHash[posting.docId] = accumHash[posting.docId]
+                    + (idfs[termIndex] * similarity.tf(posting.tf));
         }
         termIndex++;
     }
@@ -98,7 +98,7 @@ QList<Result> QueryProcessor::searchOR(const QString &query) const {
 
     foreach(PostingListIterator *it, postingLists)
         delete it;
-
+    delete[] idfs;
     qSort(results.begin(), results.end(), resultLessThan);
     return results;
 }
