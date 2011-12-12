@@ -7,12 +7,14 @@ QueryProcessor::QueryProcessor(Index *_index, const Analyzer &_analyzer, const S
     : index(_index), analyzer(_analyzer), similarity(_similarity)
 {
 }
+
 bool resultLessThan(Result &a, Result &b)
 {
     return a.score > b.score;
 }
 
-bool pairLessThan(QPair<QString, float> &a, QPair<QString, float> &b) {
+bool pairLessThan(QPair<QString, float> &a, QPair<QString, float> &b)
+{
     return a.second > b.second;
 }
 
@@ -21,7 +23,8 @@ bool postingItPointerLessThan(PostingListIterator *a, PostingListIterator *b)
     return a->size() < b->size();
 }
 
-QList<Result> QueryProcessor::searchAND(const QString &query) const {
+QList<Result> QueryProcessor::searchAND(const QString &query) const
+{
     QStringList terms = analyzer.analyze(query);
     if (terms.empty())
         return QList<Result>();
@@ -64,7 +67,8 @@ QList<Result> QueryProcessor::searchAND(const QString &query) const {
     return results;
 }
 
-QList<Result> QueryProcessor::searchOR(const QString &query) const {
+QList<Result> QueryProcessor::searchOR(const QString &query) const
+{
 
     QHash <int, float> accumHash;
     float score;
@@ -121,7 +125,7 @@ QList <QPair <QString, float> > QueryProcessor::selectKeywords(const QString &do
 
 QList<Result> QueryProcessor::recommendedDocuments(const QString &doc) const
 {
-    // Select e rank keywords according to idf
+    // Select and rank keywords according to idf
     QList <QPair <QString, float> > keywords = selectKeywords(doc);
 
     // Query will be the 10 most relevant words (according to idf)
