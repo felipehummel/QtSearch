@@ -7,7 +7,8 @@ QueryProcessor::QueryProcessor(Index *_index, const Analyzer &_analyzer, const S
     : index(_index), analyzer(_analyzer), similarity(_similarity)
 {
 }
-bool resultLessThan(Result &a, Result &b) {
+bool resultLessThan(Result &a, Result &b)
+{
     return a.score > b.score;
 }
 
@@ -15,11 +16,17 @@ bool pairLessThan(QPair<QString, float> &a, QPair<QString, float> &b) {
     return a.second > b.second;
 }
 
+bool postingItPointerLessThan(PostingListIterator *a, PostingListIterator *b)
+{
+    return a->size() < b->size();
+}
+
 QList<Result> QueryProcessor::searchAND(const QString &query) const {
     QStringList terms = analyzer.analyze(query);
     if (terms.empty())
         return QList<Result>();
     QList<PostingListIterator*> postingLists = index->getPostingIterators(terms);
+    qSort(postingLists.begin(), postingLists.end(), postingItPointerLessThan);
 
     foreach (PostingListIterator *it, postingLists) {
         if (!it->hasNext())
