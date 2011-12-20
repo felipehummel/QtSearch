@@ -12,7 +12,6 @@ public:
     void addPosting(const QString &term, int docId);
     PostingListIterator* getPostingList(const QString &term) const;
     int getDocFreq(const QString &term) const;
-    Posting current();
 
     virtual QString doc(int docId) const { return docs[docId]; }
     virtual void storeDoc(int docId, const QString &docContent) {
@@ -21,7 +20,7 @@ public:
     virtual float norm(int docId) const {
         return norms.value(docId);
     }
-    virtual float setNorm(int docId, float norm) {
+    virtual void setNorm(int docId, float norm) {
         norms.insert(docId, norm);
     }
 

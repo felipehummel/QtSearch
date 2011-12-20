@@ -90,7 +90,7 @@ public:
 protected:
     const Similarity similarity;
     virtual void addPosting(const QString &term, int docId) = 0;
-    virtual float setNorm(int docId, float norm) = 0;
+    virtual void setNorm(int docId, float norm) = 0;
 private:
     int nextDocId() { return docIdCounter++; }
     int docIdCounter;
