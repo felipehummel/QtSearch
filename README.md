@@ -139,3 +139,14 @@ You can also customize the tokenization process by extending `Tokenizer` and imp
 
     QStringList tokenize(const QString &docContent) const;
     
+    
+Customizing Scoring
+===========
+
+Up until now QtSearch is not very flexible in how you can customize ranking and scoring. 
+But you can customize how IDF (inverted document frequency), TF (term frequency) and document norms are calculated.
+To do that you just need to extend the Similarity class reimplementing the desired methods:
+
+    float norm(int docNumberTokens) const;
+    float tf(int termFrequency) const;
+    float idf(int docFrequency, int totalNumDocs, const QString &term) const;
