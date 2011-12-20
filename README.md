@@ -69,8 +69,8 @@ QtSearch has a simple approach for document recommendation. You provide a string
 Customizing the Index
 ==========
 
-All data to perform searches is stored on a `Index`. This includes vocabulary, inverted index (term's posting lists), documents content and norm. Currently QtSearch provides only `MemoryIndex`, a completely in memory index with no persistent storage.
-To implement a custom `Index` one must inherit it or `MemoryIndex` and implement/reimplement the following methods:
+All data to perform searches is stored on an `Index`. This includes vocabulary, inverted index (term's posting list), documents content and norm. Currently QtSearch provides only `MemoryIndex`, a completely in memory index with no persistent storage.
+To implement a custom `Index` one must inherit from it or `MemoryIndex` and implement/reimplement the following methods:
 
     // method that register that a term occured in a document. This method is called at every occurrence of the term
     void addPosting(const QString &term, int docId);
@@ -94,7 +94,7 @@ To implement a custom `Index` one must inherit it or `MemoryIndex` and implement
     void setNorm(int docId, float norm)
     
 
-When creating a custom `Index` you need a `PostingListIterator`implementation. If your index is already on memory or you can load to memory the whole posting list at once you can reuse `MemoryPostingListIterator`.
+When creating a custom `Index` you need a `PostingListIterator` implementation. If your index is already on memory or you can load to memory the whole posting list at once you can reuse `MemoryPostingListIterator`.
 Otherwise, you can extend `PostingListIterator` and implement the following methods:
 
     bool hasNext();
@@ -104,17 +104,17 @@ Otherwise, you can extend `PostingListIterator` and implement the following meth
     Posting current();
     int size();
 
-Aside from the `jumpTo` method the iterator is very java-like so it is not that much trouble. `jumpTo` is used to speed up and simplify boolean AND queries.
+Aside from the `jumpTo` method, the iterator is very java-like. `jumpTo` is used to speed up and simplify the implementation of boolean AND queries.
 
 
 Customizing document tokenization and analysis
 ==========
 
-When the document is sent to the `Indexer` to be indexed two processes occur: 
+When the document is sent to the `Indexer` to be indexed two things occur: 
 (1) the document textual content is tokenized (splitted) according to a `Tokenizer`;
 (2) the tokens emitted in the previous step are passed through a series of `TokenFilter` objects that can perform transformations on the terms.
 
-These steps are wrapped up in a `Analyzer` object which receives a `Tokenizer` as constructor parameter
+These steps are wrapped up in a `Analyzer` object which receives the `Tokenizer` as constructor parameter
 and `TokenFilter` objects to be used:
 
     analyzer.useFilter(new LowerCaseFilter);
@@ -122,7 +122,7 @@ and `TokenFilter` objects to be used:
     analyzer.useFilter(new BadWordsFilter);
     analyzer.useFilter(new SynonymFilter);
     
-The `Analyzer` class has basic filters bultin, you can use the by calling the following methods:
+The `Analyzer` class has basic filters built-in. You can use them by calling the following methods:
 
     analyzer.withAccentFilter();
     analyzer.withLowerCaseFilter();
@@ -143,8 +143,8 @@ You can also customize the tokenization process by extending `Tokenizer` and imp
 Customizing Scoring
 ===========
 
-Up until now QtSearch is not very flexible in how you can customize ranking and scoring. 
-But you can customize how IDF (inverted document frequency), TF (term frequency) and document norms are calculated.
+Currently QtSearch is not very flexible in how you can customize ranking and scoring. 
+But you can customize how IDF (inverted document frequency), TF (term frequency) and document norms are calculated, which suffices many use cases.
 To do that you just need to extend the Similarity class reimplementing the desired methods:
 
     float norm(int docNumberTokens) const;
