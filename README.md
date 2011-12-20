@@ -1,8 +1,8 @@
 QtSearch Library
 ===============
 
-Open Source Lib implementing a simple search engine (vector space model) in C++ using the Qt framework. The code is intendend to be extremely simple to use, understand and still be flexible to extensions.
-This lib has some large inspiration on Lucene library design.
+Open Source Lib implementing a simple search engine (vector space model) in C++ using the Qt framework. The code is intendend to be extremely simple to use and understand but still be flexible to customizations.
+This lib has some large inspiration on the Lucene library.
 
 Usage
 ===========
