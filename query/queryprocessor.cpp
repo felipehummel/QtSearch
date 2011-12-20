@@ -38,7 +38,7 @@ QList<Result> QueryProcessor::searchAND(const QString &query) const
     QList<Result> results;
     float *idfs = index->getIdfs(terms);
     Posting *matchedPostings = new Posting[postingLists.size()];
-    // TODO - sort postingListsIterator by size. Use smaller as pivot
+
     forever {
         if (!postingLists[0]->hasNext())
             break;
