@@ -85,7 +85,7 @@ QList<Result> QueryProcessor::searchOR(const QString &query) const
     foreach (PostingListIterator *it, postingLists) {
         while(it->hasNext()) {
             Posting posting = it->next();
-            accumHash[posting.docId] = accumHash[posting.docId]
+               accumHash[posting.docId] = accumHash[posting.docId]
                     + (idfs[termIndex] * similarity.tf(posting.tf));
         }
         termIndex++;
@@ -95,7 +95,7 @@ QList<Result> QueryProcessor::searchOR(const QString &query) const
 
     QHash<int, float>::const_iterator i = accumHash.constBegin();
     while (i != accumHash.constEnd()) {
-        score = i.value() * index->getNorm(i.key());
+        score = i.value() * index->norm(i.key());
         results.append(Result(i.key(),score));
         i++;
     }
@@ -148,5 +148,5 @@ float QueryProcessor::calculateScore(float *idfs, const Posting *postings, int n
     for (int i = 0; i < numTerms; ++i) {
         accum += idfs[i] * similarity.tf(postings[i].tf);
     }
-    return accum * index->getNorm(postings[0].docId);
+    return accum * index->norm(postings[0].docId);
 }

@@ -50,9 +50,8 @@ public:
     float getIdf(const QString &term) const {
         return similarity.idf(getDocFreq(term), docIdCounter, term);
     }
-    virtual float getNorm(int docId) const {
-        return norms.value(docId);
-    }
+    virtual float norm(int docId) const = 0;
+
 
     virtual int addDocument(QList<QString> terms) {
         int docId = nextDocId();
@@ -60,16 +59,14 @@ public:
             addPosting(term, docId);
         }
         // Simple doc length norm. Extracted from Lucene's DefaultSimilarity
-        norms.insert(docId, similarity.norm(terms.size()));
+        setNorm(docId, similarity.norm(terms.size()));
         return docId;
     }
     virtual int getDocFreq(const QString &term) const = 0;
 
 
-    virtual QString doc(int docId) const { return docs[docId]; }
-    virtual void storeDoc(int docId, const QString &docContent) {
-        docs.insert(docId, docContent);
-    }
+    virtual QString doc(int docId) const = 0;
+    virtual void storeDoc(int docId, const QString &docContent) = 0;
 
     // Utility methods
 
@@ -93,11 +90,10 @@ public:
 protected:
     const Similarity similarity;
     virtual void addPosting(const QString &term, int docId) = 0;
+    virtual float setNorm(int docId, float norm) = 0;
 private:
     int nextDocId() { return docIdCounter++; }
     int docIdCounter;
-    QMap<int, QString> docs;
-    QMap<int, float> norms;
 };
 
 #endif // INDEX_H

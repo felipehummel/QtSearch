@@ -14,8 +14,21 @@ public:
     int getDocFreq(const QString &term) const;
     Posting current();
 
+    virtual QString doc(int docId) const { return docs[docId]; }
+    virtual void storeDoc(int docId, const QString &docContent) {
+        docs.insert(docId, docContent);
+    }
+    virtual float norm(int docId) const {
+        return norms.value(docId);
+    }
+    virtual float setNorm(int docId, float norm) {
+        norms.insert(docId, norm);
+    }
+
 private:
     QMap<QString, QList<Posting>* > invertedIndex;
+    QMap<int, QString> docs;
+    QMap<int, float> norms;
 };
 
 
