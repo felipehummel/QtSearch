@@ -4,7 +4,12 @@ QtSearch Library
 Open Source Lib implementing a simple search engine (vector space model) in C++ using the Qt framework. The code is intendend to be extremely simple to use and understand but still be flexible to customizations.
 This lib has some large inspiration on the Lucene library.
 
-Usage
+Contributing
+==============
+
+If you want to contribute any code to the project, you can fork the project, develop and then open a pull request.
+
+Using
 ===========
 
     Similarity sim;
@@ -53,7 +58,7 @@ Usage
     } while (!line.isNull());
 
 
-Simple Document Recommendation
+Recommending Documents
 ============
 
 QtSearch has a simple approach for document recommendation. You provide a string document representing the user profile and it provides the documents most suited for that profile. It uses a simple approach of selecting the top-K most meaningful terms (greatest IDF) in the profile. 
