@@ -106,3 +106,36 @@ Otherwise, you can extend `PostingListIterator` and implement the following meth
 
 Aside from the `jumpTo` method the iterator is very java-like so it is not that much trouble. `jumpTo` is used to speed up and simplify boolean AND queries.
 
+
+Customizing document tokenization and analysis
+==========
+
+When the document is sent to the `Indexer` to be indexed two processes occur: 
+(1) the document textual content is tokenized (splitted) according to a `Tokenizer`;
+(2) the tokens emitted in the previous step are passed through a series of `TokenFilter` objects that can perform transformations on the terms.
+
+These steps are wrapped up in a `Analyzer` object which receives a `Tokenizer` as constructor parameter
+and `TokenFilter` objects to be used:
+
+    analyzer.useFilter(new LowerCaseFilter);
+    analyzer.useFilter(new AccentFilter);
+    analyzer.useFilter(new BadWordsFilter);
+    analyzer.useFilter(new SynonymFilter);
+    
+The `Analyzer` class has basic filters bultin, you can use the by calling the following methods:
+
+    analyzer.withAccentFilter();
+    analyzer.withLowerCaseFilter();
+    analyzer.withStopWordFilter(stopWords); //stopwords is a QSet<QString>
+    
+To customize the `Analyzer` you can create a new `TokenFilter` by extending and implementing the following method:
+
+
+    QStringList filter(const QString &token) const;
+    
+It returns a `QStringList` so a filter can remove a given token or return more than one token.
+
+You can also customize the tokenization process by extending `Tokenizer` and implementing:
+
+    QStringList tokenize(const QString &docContent) const;
+    
