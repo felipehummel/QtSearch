@@ -65,3 +65,44 @@ QtSearch has a simple approach for document recommendation. You provide a string
     foreach (Result result, recommendedDocs) {
         qDebug () << result.score << " :: " << index->doc(result.docId);
     }
+    
+Customizing the Index
+==========
+
+All data to perform searches is stored on a `Index`. This includes vocabulary, inverted index (term's posting lists), documents content and norm. Currently QtSearch provides only `MemoryIndex`, a completely in memory index with no persistent storage.
+To implement a custom `Index` one must inherit it or `MemoryIndex` and implement/reimplement the following methods:
+
+    // method that register that a term occured in a document. This method is called at every occurrence of the term
+    void addPosting(const QString &term, int docId);
+    
+    // returns the posting list iterator for that term. Used by the QueryProcessor to perform searches
+    PostingListIterator* getPostingList(const QString &term) const;
+    
+    // return the doc frequency of a term. Also known as the size of its posting list
+    int getDocFreq(const QString &term) const;
+
+    // return the document textual content
+    QString doc(int docId) const;
+    
+    // store the document textual content
+    void storeDoc(int docId, const QString &docContent);
+    
+    // return the document norm 
+    float norm(int docId) const;
+    
+    // store the document norm. It is already calculated by a Similarity implementation
+    void setNorm(int docId, float norm)
+    
+
+When creating a custom `Index` you need a `PostingListIterator`implementation. If your index is already on memory or you can load to memory the whole posting list at once you can reuse `MemoryPostingListIterator`.
+Otherwise, you can extend `PostingListIterator` and implement the following methods:
+
+    bool hasNext();
+    Posting next();
+    // move the iterator to the FIRST document with id EQUAL or GREATER than the provided docId
+    bool jumpTo(int docId);
+    Posting current();
+    int size();
+
+Aside from the `jumpTo` method the iterator is very java-like so it is not that much trouble. `jumpTo` is used to speed up and simplify boolean AND queries.
+
